@@ -4,7 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 import { HttpExceptionFilter } from './filters/http-exception.filter';
-import { ConfigService } from './services/config.service';
+import { configService } from './services/config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,7 +25,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  const configService = app.get(ConfigService);
   const port = configService.getPort();
   await app.listen(port);
 }

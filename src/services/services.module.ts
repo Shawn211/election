@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ConfigService } from './config.service';
+import { ConfigService, configService } from './config.service';
 
 import {
   Candidate,
@@ -9,8 +9,6 @@ import {
   User,
   Vote
 } from '../models';
-
-const configService = new ConfigService();
 
 @Module({
   imports: [
