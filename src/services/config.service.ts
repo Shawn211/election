@@ -43,6 +43,13 @@ export class ConfigService {
             synchronize: true
         };
     }
+
+    public getRedisConfig(): { host: string, port: number } {
+        return {
+            host: this.getValue('REDIS_HOST'),
+            port: parseInt(this.getValue('REDIS_PORT'))
+        };
+    }
 }
 
 const configService = new ConfigService();
