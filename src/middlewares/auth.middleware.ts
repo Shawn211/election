@@ -10,6 +10,11 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: any, res: any, next: () => void) {
+    if (['/user/login'].includes(req.url)) {
+      next();
+      return;
+    }
+
     const token = req.headers.token;
     if (!token) {
       myLogger.getHttpLogger(req, res, () => { throw new UnauthorizedException() });
