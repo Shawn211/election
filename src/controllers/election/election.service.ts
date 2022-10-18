@@ -19,6 +19,14 @@ export class ElectionService {
         return await this.electionRep.save({ status: 0 });
     }
 
+    public async getList(status?: number) {
+        const condition: { status?: number } = {};
+        if (status) {
+            condition.status = status;
+        }
+        return await this.electionRep.findBy(condition);
+    }
+
     public async getCandidateCount(electionId: number) {
         return await this.candidateRep.countBy({ electionId });
     }

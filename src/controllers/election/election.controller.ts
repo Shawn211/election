@@ -11,8 +11,9 @@ import { ElectionService } from './election.service';
 
 import {
     adminDto,
-    startDto,
-    stopDto
+    getElectionListDto,
+    startElectionDto,
+    stopElectionDto
 } from '../../dto/election.dto';
 
 @ApiTags('election')
@@ -35,11 +36,18 @@ export class ElectionController {
         return { electionId };
     }
 
+    @Get('list')
+    async getElectionList(
+        @Query() { status }: getElectionListDto
+    ) {
+        return this.electionService.getList(status);
+    }
+
     @Patch('start')
     async startElection(
         @Req() req: any,
         @Headers() { token }: adminDto,
-        @Body() { electionId }: startDto
+        @Body() { electionId }: startElectionDto
     ) {
         if (req.user.email !== 'admin@admin.com') {
             throw new ForbiddenException();
@@ -58,7 +66,7 @@ export class ElectionController {
     async stopElection(
         @Req() req: any,
         @Headers() { token }: adminDto,
-        @Body() { electionId }: stopDto
+        @Body() { electionId }: stopElectionDto
     ) {
         if (req.user.email !== 'admin@admin.com') {
             throw new ForbiddenException();

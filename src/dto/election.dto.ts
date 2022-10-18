@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { IsNotEmpty, IsString, isNumberString, Matches } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, Matches } from 'class-validator';
 
 export class adminDto {
     @ApiProperty({ example: '12345678', description: 'token' })
@@ -10,16 +10,23 @@ export class adminDto {
     token: string;
 }
 
-export class startDto {
+export class getElectionListDto {
+    @ApiPropertyOptional({ example: '1', description: '选举状态: 0-未开始 1-进行中 2-已结束' })
+    @IsNotEmpty()
+    @IsNumber()
+    status?: number;
+}
+
+export class startElectionDto {
     @ApiProperty({ example: '1', description: '选举ID' })
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     electionId: number;
 }
 
-export class stopDto {
+export class stopElectionDto {
     @ApiProperty({ example: '1', description: '选举ID' })
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     electionId: number;
 }
