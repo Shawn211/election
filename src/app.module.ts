@@ -1,7 +1,4 @@
-import { Module, MiddlewareConsumer, RequestMethod, CacheModule } from '@nestjs/common';
-
-import type { ClientOpts } from 'redis';
-import * as redisStore from 'cache-manager-redis-store';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,23 +6,18 @@ import { AppService } from './app.service';
 import { ControllersModule } from './controllers/controllers.module';
 import { ServicesModule } from './services/services.module';
 
-import { configService } from './services/config.service';
-
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
+
+import { RedisService } from './services/redis.service';
 
 @Module({
   imports: [
     ControllersModule,
-    ServicesModule,
-    CacheModule.register<ClientOpts>({
-      isGlobal: true,
-      store: redisStore,
-      ...configService.getRedisConfig()
-    })
+    ServicesModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RedisService],
 })
 export class AppModule {
   async configure(consumer: MiddlewareConsumer) {

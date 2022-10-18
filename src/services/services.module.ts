@@ -10,6 +10,7 @@ import {
   Vote
 } from '../models';
 import { MyLoggerService } from './my-logger.service';
+import { RedisService } from './redis.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { MyLoggerService } from './my-logger.service';
       Vote
     ])
   ],
-  providers: [ConfigService, MyLoggerService]
+  providers: [ConfigService, MyLoggerService, RedisService]
 })
 export class ServicesModule {}

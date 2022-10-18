@@ -1,12 +1,12 @@
-import { Injectable, NestMiddleware, Inject, CACHE_MANAGER, UnauthorizedException } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 
 import { myLogger } from '../services/my-logger.service';
+import { RedisService } from '../services/redis.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    private readonly redisService: RedisService
   ) {}
 
   async use(req: any, res: any, next: () => void) {
@@ -16,7 +16,7 @@ export class AuthMiddleware implements NestMiddleware {
       return;
     }
 
-    const user = await this.cacheManager.get(token);
+    const user = await this.redisService.get(token);
     if (!user) {
       myLogger.getHttpLogger(req, res, () => { throw new UnauthorizedException() });
       return;
