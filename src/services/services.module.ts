@@ -9,6 +9,7 @@ import {
   User,
   Vote
 } from '../models';
+import { MyLoggerService } from './my-logger.service';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import {
       Vote
     ])
   ],
-  providers: [ConfigService]
+  providers: [ConfigService, MyLoggerService]
 })
 export class ServicesModule {}

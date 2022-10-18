@@ -50,6 +50,10 @@ export class ConfigService {
             port: parseInt(this.getValue('REDIS_PORT'))
         };
     }
+
+    public getLogDirectory(): string {
+        return path.join(__dirname, '../..', this.getValue('LOG_DIRECTORY'));
+    }
 }
 
 const configService = new ConfigService();

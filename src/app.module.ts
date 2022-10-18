@@ -12,6 +12,7 @@ import { ServicesModule } from './services/services.module';
 import { configService } from './services/config.service';
 
 import { AuthMiddleware } from './middlewares/auth.middleware';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -30,6 +31,8 @@ export class AppModule {
   async configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
+      .apply(LoggerMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
