@@ -9,8 +9,8 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { CandidateService } from './candidate.service';
 
+import { tokenDto } from '../../dto/common.dto';
 import {
-    adminDto,
     addCandidateDto
 } from '../../dto/candidate.dto';
 
@@ -28,7 +28,7 @@ export class CandidateController {
     @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async addCandidate(
         @Req() req: any,
-        @Headers() { token }: adminDto,
+        @Headers() { token }: tokenDto,
         @Body() { electionId, userId }: addCandidateDto
     ) {
         if (req.user.email !== 'admin@admin.com') {

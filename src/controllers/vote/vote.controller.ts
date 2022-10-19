@@ -9,8 +9,8 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { VoteService } from './vote.service';
 
+import { tokenDto } from '../../dto/common.dto';
 import {
-    adminDto,
     addVoteDto,
     getCurrentElectionStateDto,
     getElectionResultDto
@@ -30,6 +30,7 @@ export class VoteController {
     @ApiResponse({ status: 400, description: '选举已结束或暂未开始' })
     async addVote(
         @Req() req: any,
+        @Headers() { token }: tokenDto,
         @Body() { candidateId }: addVoteDto
     ) {
         const { userId } = req.user;
@@ -61,7 +62,7 @@ export class VoteController {
     @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async getCurrentElectionState(
         @Req() req: any,
-        @Headers() { token }: adminDto,
+        @Headers() { token }: tokenDto,
         @Query() { electionId, page }: getCurrentElectionStateDto
     ) {
         if (req.user.email !== 'admin@admin.com') {
@@ -78,7 +79,7 @@ export class VoteController {
     @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async getElectionResult(
         @Req() req: any,
-        @Headers() { token }: adminDto,
+        @Headers() { token }: tokenDto,
         @Query() { electionId }: getElectionResultDto
     ) {
         if (req.user.email !== 'admin@admin.com') {

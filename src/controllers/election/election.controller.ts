@@ -9,8 +9,8 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { ElectionService } from './election.service';
 
+import { tokenDto } from '../../dto/common.dto';
 import {
-    adminDto,
     getElectionListDto,
     startElectionDto,
     stopElectionDto
@@ -30,7 +30,7 @@ export class ElectionController {
     @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async addElection(
         @Req() req: any,
-        @Headers() { token }: adminDto
+        @Headers() { token }: tokenDto
     ) {
         if (req.user.email !== 'admin@admin.com') {
             throw new ForbiddenException();
@@ -45,9 +45,10 @@ export class ElectionController {
     @ApiResponse({ status: 200, description: '查询成功' })
     @ApiResponse({ status: 400, description: '无效参数' })
     async getElectionList(
+        @Headers() { token }: tokenDto,
         @Query() { status }: getElectionListDto
     ) {
-        return this.electionService.getList(status);
+        return this.electionService.getList(parseInt(status));
     }
 
     @Patch('start')
@@ -57,7 +58,7 @@ export class ElectionController {
     @ApiResponse({ status: 400, description: '该选举少于2个候选人' })
     async startElection(
         @Req() req: any,
-        @Headers() { token }: adminDto,
+        @Headers() { token }: tokenDto,
         @Body() { electionId }: startElectionDto
     ) {
         if (req.user.email !== 'admin@admin.com') {
@@ -80,7 +81,7 @@ export class ElectionController {
     @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async stopElection(
         @Req() req: any,
-        @Headers() { token }: adminDto,
+        @Headers() { token }: tokenDto,
         @Body() { electionId }: stopElectionDto
     ) {
         if (req.user.email !== 'admin@admin.com') {

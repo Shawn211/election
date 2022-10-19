@@ -51,3 +51,9 @@ npm run start:dev
   |voteId|投票ID|
   |candidateId|候选者ID|
   |voterId|投票者ID|
+
+## 注意事项
+* 邮件通知功能是基于从 ethereal.email 生成的测试 SMTP 服务帐户，所以并不会真实发送邮件，但 Ethereal 平台提供了模拟发送成功的该邮件在线预览功能，服务端会打印对应预览地址，类似：
+```bash
+Preview URL: https://ethereal.email/message/xxx...
+```

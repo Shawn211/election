@@ -96,15 +96,14 @@ export class VoteService {
         const currentElectionStateMap: Map<
             number,
             {
-                candidate_candidateId: number,
                 user_email: string,
                 user_hkId: string,
                 voteCount: number,
                 voters: string[]
             }
         > = new Map();
-        candidates.forEach(candidate => currentElectionStateMap.set(
-            candidate.candidate_candidateId,
+        candidates.forEach(({ candidate_candidateId, ...candidate }) => currentElectionStateMap.set(
+            candidate_candidateId,
             {
                 ...candidate,
                 voteCount: 0,
@@ -119,28 +118,13 @@ export class VoteService {
 
         voters.forEach(
             voter => currentElectionStateMap.get(voter.vote_candidateId).voters =
-                voter.voters.split(',').slice(skip, skip + take)
+                page ? voter.voters.split(',').slice(skip, skip + take) : voter.voters.split(',')
         );
 
         return [...currentElectionStateMap.values()];
     }
 
     public async getElectionResult(electionId: number) {
-        const candidates = await this.getCandidates(electionId);
-
-        const voteCounts = await this.getVoteCounts(candidates.map(candidate => candidate.candidate_candidateId));
-
-        const electionResultMap: Map<number, { user_email: string, user_hkId: string, voteCount: number }> = new Map();
-        candidates.forEach(({ candidate_candidateId, user_email, user_hkId }) => electionResultMap.set(
-            candidate_candidateId,
-            { user_email, user_hkId, voteCount: 0 }
-        ));
-
-        voteCounts.forEach(
-            voteCount => electionResultMap.get(voteCount.vote_candidateId).voteCount =
-                voteCount.count
-        );
-
-        return [...electionResultMap.values()];
+        return await this.getCurrentElectionState(electionId, 0);
     }
 }
