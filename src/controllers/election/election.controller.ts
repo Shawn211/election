@@ -55,7 +55,7 @@ export class ElectionController {
 
         const candidateCount = await this.electionService.getCandidateCount(electionId);
         if (candidateCount < 2) {
-            throw new BadRequestException();
+            throw new BadRequestException('Less than two candidates');
         }
 
         await this.electionService.start(electionId);
