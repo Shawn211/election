@@ -29,3 +29,22 @@ echo "CREATE TABLE \"vote\"(\"voteId\" SERIAL PRIMARY KEY NOT NULL, \"candidateI
 echo "CREATE TABLE \"election\"(\"electionId\" SERIAL PRIMARY KEY NOT NULL, \"status\" INT NOT NULL);" | docker exec -i $SERVER psql -d $DB -U postgres
 # create the admin user
 echo "INSERT INTO \"user\" (\"email\", \"hkId\") VALUES ('admin@admin.com', 'A012345(6)');" | docker exec -i $SERVER psql -d $DB -U postgres
+
+#####################
+
+REDIS_SERVER="some-redis";
+
+echo "echo stop & remove old docker [$REDIS_SERVER] and starting new fresh instance of [$REDIS_SERVER]"
+(docker kill $REDIS_SERVER || :) && \
+  (docker rm $REDIS_SERVER || :) && \
+  docker run --name $REDIS_SERVER \
+  -p 6379:6379 \
+  -d redis
+
+# wait for redis to start
+echo "sleep wait for redis-server [$REDIS_SERVER] to start";
+SLEEP 3;
+
+#####################
+
+echo "Initialize db success!"
