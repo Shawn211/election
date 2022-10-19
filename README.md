@@ -18,9 +18,36 @@ npm run start:dev
 ```
 
 ## API 文档
-[http://localhost:2711/api](http://localhost:2711/api)
+地址：[http://localhost:2711/api](http://localhost:2711/api)
+
+内容：包含所有实现功能的接口与对应参数限制，并涵盖了所有约束情况的对应状态码的描述
 
 ## 系统管理员
 |邮箱|香港身份证号|权限|
 |----|-----|-----|
 |admin@admin.com|A012345(6)|系统管理员|
+
+## 数据库表设计
+* Election
+  |字段|描述|
+  |----|-----|
+  |electionId|选举ID|
+  |status|选举状态: 0-未开始 1-进行中 2-已结束|
+* User
+  |字段|描述|
+  |----|-----|
+  |userId|用户ID|
+  |email|邮箱|
+  |hkId|香港身份证号码|
+* Candidate
+  |字段|描述|
+  |----|-----|
+  |candidateId|候选人ID|
+  |electionId|选举ID|
+  |userId|用户ID|
+* Vote
+  |字段|描述|
+  |----|-----|
+  |voteId|投票ID|
+  |candidateId|候选者ID|
+  |voterId|投票者ID|
