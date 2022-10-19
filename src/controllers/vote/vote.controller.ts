@@ -5,7 +5,7 @@ import {
     Req, Res,
     BadRequestException, ForbiddenException, NotFoundException
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { VoteService } from './vote.service';
 
@@ -24,6 +24,10 @@ export class VoteController {
     ) {}
 
     @Post('add')
+    @ApiOperation({ summary: '发起投票' })
+    @ApiResponse({ status: 200, description: '发起成功，并一次性查看选举实时状态' })
+    @ApiResponse({ status: 403, description: '已投票' })
+    @ApiResponse({ status: 400, description: '选举已结束或暂未开始' })
     async addVote(
         @Req() req: any,
         @Body() { candidateId }: addVoteDto
@@ -51,6 +55,10 @@ export class VoteController {
     }
 
     @Get('current')
+    @ApiOperation({ summary: '获取指定选举的实时得票情况' })
+    @ApiResponse({ status: 200, description: '获取成功' })
+    @ApiResponse({ status: 400, description: '无效参数' })
+    @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async getCurrentElectionState(
         @Req() req: any,
         @Headers() { token }: adminDto,
@@ -64,6 +72,10 @@ export class VoteController {
     }
 
     @Get('result')
+    @ApiOperation({ summary: '获取指定选举的最终结果' })
+    @ApiResponse({ status: 200, description: '获取成功' })
+    @ApiResponse({ status: 400, description: '无效参数' })
+    @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async getElectionResult(
         @Req() req: any,
         @Headers() { token }: adminDto,

@@ -5,7 +5,7 @@ import {
     Req, Res,
     BadRequestException, ForbiddenException, NotFoundException
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 
@@ -21,6 +21,9 @@ export class UserController {
     ) {}
 
     @Post('login')
+    @ApiOperation({ summary: '用户登记邮箱和验证香港身份证号码，并获得 Token' })
+    @ApiResponse({ status: 201, description: '登陆成功' })
+    @ApiResponse({ status: 400, description: '无效参数' })
     async login(
         @Body() { email, hkId }: LoginDto
     ) {

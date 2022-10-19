@@ -5,7 +5,7 @@ import {
     Req, Res,
     BadRequestException, ForbiddenException, NotFoundException
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { CandidateService } from './candidate.service';
 
@@ -22,6 +22,10 @@ export class CandidateController {
     ) {}
 
     @Post('add')
+    @ApiOperation({ summary: '添加候选人' })
+    @ApiResponse({ status: 201, description: '添加成功' })
+    @ApiResponse({ status: 400, description: '无效参数' })
+    @ApiResponse({ status: 403, description: '无系统管理员权限' })
     async addCandidate(
         @Req() req: any,
         @Headers() { token }: adminDto,
